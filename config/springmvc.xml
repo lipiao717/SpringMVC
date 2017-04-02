@@ -12,19 +12,24 @@
 		http://www.springframework.org/schema/aop/spring-aop-3.2.xsd 
 		http://www.springframework.org/schema/tx 
 		http://www.springframework.org/schema/tx/spring-tx-3.2.xsd ">
+
+	<!-- 配置handler -->
+	<bean name="/queryItems.action" class="cn.itcast.ssm.controller.ItemsController1" />
+
+	<!-- 处理器映射器 将bean的name作为url进行查找，需要在配置handler时指定beanname（就是url） -->
+	<bean
+		class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" />
+
+	<!-- 处理器适配器 所有的适配器处理器都实现HandlerAdapter接口 -->
+	<bean
+		class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
+
+	<!-- 视图解析器
+	解析jsp视图，默认使用jstl标签，classpath下得有jstl的包
+	 -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		
-		<!-- 配置handler -->
-		<bean name="" class="" />
-		
-		<!-- 处理器映射器 
-		将bean的name作为url进行查找，需要在配置handler时指定beanname（就是url）
-		-->
-		<bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" />
-		
-		<!-- 处理器适配器
-		所有的适配器处理器都实现HandlerAdapter接口
-		 -->
-		<bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter"/> 
-		<!-- 视图解析器 -->
-		
+	</bean>
+
 </beans>
