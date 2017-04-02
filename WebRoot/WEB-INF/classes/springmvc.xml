@@ -14,22 +14,56 @@
 		http://www.springframework.org/schema/tx/spring-tx-3.2.xsd ">
 
 	<!-- 配置handler -->
-	<bean name="/queryItems.action" class="cn.itcast.ssm.controller.ItemsController1" />
+	<bean id="itemsController1" name="/queryItems_test.action"
+		class="cn.itcast.ssm.controller.ItemsController1" />
 
-	<!-- 处理器映射器 将bean的name作为url进行查找，需要在配置handler时指定beanname（就是url） -->
+	<!-- 配置另外一个handler -->
+	<bean id="itemsController2" class="cn.itcast.ssm.controller.ItemsController2" />
+
+
+	<!-- 对于注解的Handler可以单个配置 实际开发中建议使用组件扫描 -->
+	<bean class="cn.itcast.ssm.controller.ItemsController3" />
+	<!-- 扫描controller注解,多个包中间使用半角逗号分隔 -->
+	<context:component-scan base-package="cn.itcast.ssm.controller" />
+
+
+	<!-- 处理器映射器 将bean的name作为url进行查找，需要在配置handler时指定beanname（就是url） 所有的映射器都实现了HandlerMapping接口 -->
 	<bean
 		class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" />
+	<!-- 简单URL映射 -->
+	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+			<props>
+				<prop key="/queryItems1.action">itemsController1</prop>
+				<prop key="/queryItems2.action">itemsController1</prop>
+				<prop key="/queryItems3.action">itemsController2</prop>
+			</props>
+		</property>
+	</bean>
+
+
+	<!--注解映射器 -->
+	<bean
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
+	<!--注解适配器 -->
+	<bean
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter" />
+	<!-- 使用mvc:annotation-driven代替上面注解映射器和注解适配器 mvc:annotation-driven默认加载很多的参数绑定方法，比如json转换器就默认加载了 
+		如果使用mvc:annotation-driven不用配置上面的RequestMappingHandlerMapping，RequestMappingHandlerAdapter -->
+	<!-- <mvc:annotation-driven></mvc:annotation-driven> -->
 
 	<!-- 处理器适配器 所有的适配器处理器都实现HandlerAdapter接口 -->
 	<bean
 		class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
+	<!-- 配置另外一个适配器 -->
+	<bean class="org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter" />
 
-	<!-- 视图解析器
-	解析jsp视图，默认使用jstl标签，classpath下得有jstl的包
-	 -->
+
+	<!-- 视图解析器 解析jsp视图，默认使用jstl标签，classpath下得有jstl的包 -->
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
 	</bean>
 
 </beans>
